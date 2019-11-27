@@ -76,7 +76,7 @@ case ${type} in
 		# Converting from WAV to MP3
 		newmix=${episodes}/${episode}/${episode}.mp3
 		sox -S ${remix_wav} -c 2 -C ${bitrate}.01 -t mp3 ${newmix}
-		size=$(stat -f%z ${newmix})
+		size=$(wc -c ${newmix} | xargs | cut -d" " -f1)
 		duration=$(soxi -D ${newmix})
 		bitrate=$(soxi -B ${newmix} | sed -e 's/k//g')
 	;;
@@ -84,7 +84,7 @@ case ${type} in
 		# Converting from WAV to M4A
 		newmix=${episodes}/${episode}/${episode}.m4a
 		ffmpeg -i ${remix_wav} -ar 44100 ${newmix}
-		size=$(stat -f%z  ${newmix})
+		size=$(wc -c ${newmix} | xargs | cut -d" " -f1)
 		duration=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 ${newmix})
 		bitrate=$(( $(ffprobe -v error -show_entries format=bit_rate -of default=noprint_wrappers=1:nokey=1 ${newmix}) / 1000))
 	;;

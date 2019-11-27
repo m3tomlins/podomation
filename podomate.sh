@@ -1,4 +1,22 @@
 #!/bin/bash
+
+# USAGE AND ARGS
+display_usage() { 
+  echo -e "Usage:\tpodomate.sh [episode folder] [upload:true/false]" 
+  echo -e "\tepisode folder = the name of the folder under episodes"
+  echo -e "\tupload = should the output audio file be uploaded to Blubrry"
+} 
+# if less than two arguments supplied, display usage 
+  if [  $# -le 1 ];then
+    display_usage
+  fi 
+ 
+# check whether user had supplied -h or --help . If yes display usage 
+  if [[ ( $# == "--help") ||  $# == "-h" ]];then
+    display_usage
+  fi 
+ 
+## MAIN ENVIRONMENT
 base=$PWD
 episode=${1}
 upload=${2:-"false"}
@@ -10,11 +28,11 @@ info_file=${episodes}/${episode}/${episode}.info
 ## IF THE EPISODE FOLDER DOESN'T EXIST, ABORT
 if [ ! -d ${episodes}/${episode} ]; then
 	echo "ERROR: ${episodes}/${episode} does not exist!!"
-	return -1;
+	exit -1;
 fi
 if [ ! -f ${info_file} ]; then
 	echo "ERROR: ${info_file} does not exist!!"
-	return -1;
+	exit -1;
 fi
 
 ## IF THERE IS NO .MP3 or .M4A THIS IS A NEW EPISODE
@@ -42,11 +60,16 @@ for clip in $(cat ${info_file} | grep CLIP); do
 	clip_num=$(echo ${clip} | cut -d"_" -f2 | cut -d"=" -f1)
 	clip_file=$(echo ${clip} | cut -d"=" -f2 | cut -d"," -f1)
 	clip_pad=$(echo ${clip} | cut -d"," -f2 | cut -d"=" -f2)
-	clip_duration=$(soxi -D ${clip_file})
-	padding=$(echo ${elapsed} - ${clip_pad} | bc)
- 	echo -e "${sox_cmd}\"|sox ${clip_file} -p pad ${padding} 0\" \\" >> ${sox_script}
-	echo "ADDED: ${clip_file} at ${padding} seconds"
-	elapsed=$(echo ${elapsed} + ${clip_duration} - ${clip_pad} | bc)
+	if [ -f ${clip_file} ]; then
+		clip_duration=$(soxi -D ${clip_file})
+		padding=$(echo ${elapsed} - ${clip_pad} | bc)
+	 	echo -e "${sox_cmd}\"|sox ${clip_file} -p pad ${padding} 0\" \\" >> ${sox_script}
+		echo "ADDED: ${clip_file} at ${padding} seconds"
+		elapsed=$(echo ${elapsed} + ${clip_duration} - ${clip_pad} | bc)
+	else
+		echo "ERROR: ${clip_file} is not found!!"
+		exit -1;
+	fi
 done
 
 ## MIX IT ALL DOWN WITH -6db Normalization

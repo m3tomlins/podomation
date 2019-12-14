@@ -25,14 +25,13 @@ episodes="${base}/episodes"
 backups="${episodes}/${episode}/backups"
 info_file=${episodes}/${episode}/${episode}.info
 
-## IF THE EPISODE FOLDER DOESN'T EXIST, ABORT
+## IF THE EPISODE FOLDER DOESN'T EXIST
 if [ ! -d ${episodes}/${episode} ]; then
-	echo "ERROR: ${episodes}/${episode} does not exist!!"
-	exit -1;
+	mkdir ${episodes}/${episode}	
 fi
 if [ ! -f ${info_file} ]; then
 	echo "ERROR: ${info_file} does not exist!!"
-	exit -1;
+	exit;
 fi
 
 ## IF THERE IS NO .MP3 or .M4A THIS IS A NEW EPISODE

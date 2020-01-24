@@ -1,9 +1,7 @@
 #!/bin/bash
 episodes="episodes"
 clips="clips"
-#feedurl="http://kimcrayton.com/feed/podcast"
-#feedurl="https://hashtagcauseascene.com/feed/podcast"
-feedurl="https://hashtagcauseascene.com/podcast/feed/podcast"
+feedurl="https://{yoururl}.com/podcast/feed/podcast"
 
 # GET THE LATEST FILES FROM RSS
 cd ${episodes}

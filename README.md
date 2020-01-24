@@ -6,7 +6,7 @@ there are folders: clips = audio clips that are shared across the episodes episo
 
 the episode folder contains: info file = the metadata and "control file" for the podomation sequence Segment file(s) = the .wavs that are the episode audio Mixdown audio = the compressed .mp3 or .m4a file that is uploaded to the web backups = a folder with the history of all .mp3 or .m4a that were ever remixed
 
-audio format for causeascene = 24-bit/48kHz ...all the .wavs are made to
+audio format for = 24-bit/48kHz ...all the .wavs are made to
 
 Dependencies:
 

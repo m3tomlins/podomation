@@ -163,8 +163,8 @@ if [ "${upload}" == "true" ]; then
 	cd ${base}
 fi	
 
-## COPY TO THE GOOGLE DRIVE FOLDER READY FOR KIM
-#cp ${newmix} /Volumes/NEXSTAR/CauseAScene/Google\ Drive/Ready\ for\ Kim/.
+## COPY TO THE GOOGLE DRIVE FOLDER READY TO POST
+#cp ${newmix} /Google\ Drive/Ready\ To\ Post/.
 
 ## remove temp files
 rm ${remix_wav}

@@ -2,9 +2,10 @@
 
 # USAGE AND ARGS
 display_usage() { 
-  echo -e "Usage:\tpodomate.sh [episode folder] [upload:true/false]" 
+  echo -e "Usage:\tpodomate.sh [episode folder] [upload:true/false] [transcribe:true/false]" 
   echo -e "\tepisode folder = the name of the folder under episodes"
   echo -e "\tupload = should the output audio file be uploaded to Blubrry"
+  echo -e "\ttranscribe = should a transcription job be started"
 } 
 # if less than two arguments supplied, display usage 
   if [  $# -le 1 ];then
@@ -20,6 +21,7 @@ display_usage() {
 base=$PWD
 episode=${1}
 upload=${2:-"false"}
+transcribe=${3:-"false"}
 clips="${base}/clips"
 episodes="${base}/episodes"
 backups="${episodes}/${episode}/backups"
@@ -162,6 +164,10 @@ if [ "${upload}" == "true" ]; then
 	FTPSCRIPT
 	cd ${base}
 fi	
+
+if [ "${transcribe}" == "true" ]; then
+  ./transcribe.sh start-job ${episode}
+fi
 
 ## COPY TO THE GOOGLE DRIVE FOLDER READY TO POST
 #cp ${newmix} /Google\ Drive/Ready\ To\ Post/.

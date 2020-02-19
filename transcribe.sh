@@ -68,10 +68,14 @@ media_file=$(echo $episode_name.mp3 | sed -e 's/[.]mp3[.]mp3$/.mp3/')
 case $command in
   start-job)
     if [ "$1" == '--speakers' ]; then
-      num_speakers=$(echo "$speakers" | awk -F "," '{print NF-1}')
+      speakers="$2"
       shift; shift
 
-      settings="--settings ShowSpeakerLabels=true,MaxSpeakerLabels=${num_speakers}"
+      num_speakers=$(echo "$speakers" | awk -F "," '{print NF}')
+
+      if [ $num_speakers -gt 1 ]; then
+        settings="--settings ShowSpeakerLabels=true,MaxSpeakerLabels=${num_speakers}"
+      fi
     fi
 
     aws s3 ls s3://${S3_BUCKET}/${S3_MEDIA_PATH}/$media_file \
@@ -107,8 +111,8 @@ case $command in
     fi
 
     if [ "$1" == '--speakers' ]; then
-      speakers="$1"
-      shift
+      speakers="$2"
+      shift; shift
     else
       warn "Missing required option --speakers NAME"
       warn

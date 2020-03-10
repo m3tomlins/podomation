@@ -1,22 +1,22 @@
 #!/bin/bash
 
 # USAGE AND ARGS
-display_usage() { 
-  echo -e "Usage:\tpodomate.sh [episode folder] [upload:true/false] [transcribe:true/false]" 
+display_usage() {
+  echo -e "Usage:\tpodomate.sh [episode folder] [upload:true/false] [transcribe:true/false]"
   echo -e "\tepisode folder = the name of the folder under episodes"
   echo -e "\tupload = should the output audio file be uploaded to Blubrry"
   echo -e "\ttranscribe = should a transcription job be started"
-} 
-# if less than two arguments supplied, display usage 
+}
+# if less than two arguments supplied, display usage
   if [  $# -le 1 ];then
     display_usage
-  fi 
- 
-# check whether user had supplied -h or --help . If yes display usage 
+  fi
+
+# check whether user had supplied -h or --help . If yes display usage
   if [[ ( $# == "--help") ||  $# == "-h" ]];then
     display_usage
-  fi 
- 
+  fi
+
 ## MAIN ENVIRONMENT
 base=$PWD
 episode=${1}
@@ -29,7 +29,7 @@ info_file=${episodes}/${episode}/${episode}.info
 
 ## IF THE EPISODE FOLDER DOESN'T EXIST
 if [ ! -d ${episodes}/${episode} ]; then
-	mkdir ${episodes}/${episode}	
+	mkdir ${episodes}/${episode}
 fi
 if [ ! -f ${info_file} ]; then
 	echo "ERROR: ${info_file} does not exist!!"
@@ -75,7 +75,7 @@ done
 
 ## MIX IT ALL DOWN WITH -6db Normalization
 remix_wav="/tmp/remix_${RANDOM}.wav"
-echo -e "${remix_wav} gain -n -6" >> ${sox_script}
+echo -e "${remix_wav} gain -n -3" >> ${sox_script}
 echo "MIXING DOWN to ${remix_wav}...."
 $(. ${sox_script})
 
@@ -117,7 +117,7 @@ case ${type} in
 	;;
 esac
 
-## make backup copy of the newmix 
+## make backup copy of the newmix
 cp ${episodes}/${episode}/${episode}.${type} ${backups}/${episode}.${type}.$(date '+%Y%m%d%H%M%S')
 
 if [ $new_episode = true ]; then
@@ -149,21 +149,8 @@ cat ${info_file}
 
 
 if [ "${upload}" == "true" ]; then
-	ftp_host=$(cat upload.credentials | grep ftp_host | cut -d"=" -f2)
-	ftp_user=$(cat upload.credentials | grep ftp_user | cut -d"=" -f2)
-	ftp_password=$(cat upload.credentials | grep ftp_password | cut -d"=" -f2)
-	echo "UPLOADING: ${newmix} to ${ftp_host}"
-	cd ${episodes}/${episode}
-	ftp -v -n $ftp_host<<-FTPSCRIPT
-	quote USER $ftp_user
-	quote PASS $ftp_password
-	binary
-	passive
-	put ${episode}.${type}
-	quit
-	FTPSCRIPT
-	cd ${base}
-fi	
+  ./upload.sh ${episode}
+fi
 
 if [ "${transcribe}" == "true" ]; then
   ./transcribe.sh start-job ${episode}

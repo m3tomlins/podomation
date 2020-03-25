@@ -1,7 +1,7 @@
 #!/bin/bash
-base=$(pwd)
+base=$PWD
 episodes=${base}/episodes
-episode_name="$1"
+episode="$1"
 info_file=${episodes}/${episode}/${episode}.info
 type=$(cat ${info_file} | grep ORIG_TYPE | cut -d"=" -f2)
 ftp_host=$(cat upload.credentials | grep ftp_host | cut -d"=" -f2)

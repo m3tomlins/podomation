@@ -122,7 +122,7 @@ cp ${episodes}/${episode}/${episode}.${type} ${backups}/${episode}.${type}.$(dat
 
 if [ $new_episode = true ]; then
 	echo "WRITING INFO ${info_file}..."
-	echo -e "\nORIG_FILE=${episode}.${type}" >> ${info_file}
+	echo "ORIG_FILE=${episode}.${type}" >> ${info_file}
 	echo "ORIG_NAME=${episode}" >> ${info_file}
 	echo "ORIG_TYPE=${type}" >> ${info_file}
 	echo "ORIG_SIZE=${size}" >> ${info_file}
@@ -145,15 +145,14 @@ else
 	#percent_diff=${percent_diff#-}
 	#echo "NEW_SIZE: ${size_diff} / ${percent_diff} %"
 fi
-cat ${info_file}
-
 
 if [ "${upload}" == "true" ]; then
   ./upload.sh ${episode}
 fi
 
 if [ "${transcribe}" == "true" ]; then
-  ./transcribe.sh start-job ${episode}
+  speakers=$(cat ${info_file} | grep SPEAKERS | cut -d"=" -f2)
+  ./transcribe.sh start-job ${episode} --speakers "${speakers}"
 fi
 
 ## COPY TO THE GOOGLE DRIVE FOLDER READY TO POST

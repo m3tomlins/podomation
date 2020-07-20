@@ -85,7 +85,6 @@ case $command in
     aws transcribe start-transcription-job \
       --transcription-job-name $episode_name \
       --language-code en-US \
-      --media-sample-rate-hertz 48000 \
       --media-format mp3 \
       --media MediaFileUri=s3://$S3_BUCKET/$S3_MEDIA_PATH/$media_file \
       --output-bucket-name $S3_BUCKET \

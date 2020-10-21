@@ -1,0 +1,28 @@
+<joblist>
+  <job>
+    <defaultTab>nodes</defaultTab>
+    <description></description>
+    <executionEnabled>true</executionEnabled>
+    <loglevel>INFO</loglevel>
+    <name>Remixer</name>
+    <nodeFilterEditable>false</nodeFilterEditable>
+    <plugins />
+    <scheduleEnabled>true</scheduleEnabled>
+    <sequence keepgoing='false' strategy='node-first'>
+      <command>
+        <script><![CDATA[#!/bin/bash
+export RD_TOKEN=YzsG2k0T40cI8R0DtYHGrzsp8nimqxml
+export RD_URL=http://127.0.0.1:4440
+show="/mnt/CauseAScene"
+podomation="${show}/Podomation"
+episodes="${podomation}/episodes"
+
+for episode in $(ls -1d ${episodes}/* | egrep -v "@ea|HTBAA|TINN|White_Rage|TEMP"); do
+    echo "DEBUG: episode=${episode}"
+    /usr/bin/rd run --job Podomater -p Podomation-CAS --follow -- -episode $(basename ${episode}) -transcribe false -replace true
+done]]></script>
+        <scriptargs />
+      </command>
+    </sequence>
+  </job>
+</joblist>

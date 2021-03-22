@@ -1,0 +1,20 @@
+<joblist>
+  <job>
+    <defaultTab>nodes</defaultTab>
+    <description>Core functions to create a new show, rename/move an existing show and remove a show.</description>
+    <executionEnabled>true</executionEnabled>
+    <group>Admin</group>
+    <loglevel>INFO</loglevel>
+    <name>Show Admin</name>
+    <nodeFilterEditable>false</nodeFilterEditable>
+    <plugins />
+    <scheduleEnabled>true</scheduleEnabled>
+    <sequence keepgoing='false' strategy='node-first'>
+      <command>
+        <script><![CDATA[#!/bin/bash
+echo "Show Admin"]]></script>
+        <scriptargs />
+      </command>
+    </sequence>
+  </job>
+</joblist>
